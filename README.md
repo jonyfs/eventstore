@@ -18,9 +18,9 @@ public interface EventStore {
 
 ## Continuous Code Quality
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=alert_status)](https://sonarcloud.io/dashboard?id=jonyfs_eventstore)
-[![Security](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=security_rating)](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=security_rating)
-[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=sqale_rating)](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=sqale_rating)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=coverage)](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=coverage)
+[![Security](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=security_rating)](https://sonarcloud.io/dashboard?id=jonyfs_eventstore)
+[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=jonyfs_eventstore)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=coverage)](https://sonarcloud.io/dashboard?id=jonyfs_eventstore)
 
 
 ##Tasks:
