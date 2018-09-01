@@ -1,4 +1,4 @@
-package net.intelie.challenges;
+package br.com.jonyfs.event;
 
 /**
  * An iterator over an event collection.

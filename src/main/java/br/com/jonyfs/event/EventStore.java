@@ -1,4 +1,4 @@
-package net.intelie.challenges;
+package br.com.jonyfs.event;
 
 /**
  * An abstraction of an event store.
