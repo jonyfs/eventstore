@@ -1,9 +1,11 @@
 package br.com.jonyfs.event;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
 public interface EventRepository extends PagingAndSortingRepository<Event, String> {
 
@@ -11,5 +13,9 @@ public interface EventRepository extends PagingAndSortingRepository<Event, Strin
 
     List<Event> deleteByType(String type);
 
-    Iterator<Event> findAllByTypeAndMomentGreaterThanEqualAndMomentLessThan(String type, LocalDateTime startTime, LocalDateTime endTime);
+    Iterator<Event> findByTypeAndMomentBetween(String type, Date start, Date stop);
+
+    @Query("select e from Event e where e.type = :type and e.moment between :start and :end")
+    Iterator<Event> findAll(@Param("type") String type, @Param("start") Date start, @Param("end") Date end);
+
 }

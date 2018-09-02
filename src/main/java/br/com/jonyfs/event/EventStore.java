@@ -1,6 +1,6 @@
 package br.com.jonyfs.event;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * An abstraction of an event store.
@@ -29,11 +29,11 @@ public interface EventStore {
      * Retrieves an iterator for events based on their type and timestamp.
      *
      * @param type      The type we are querying for.
-     * @param startTime Start LocalDateTime (inclusive).
-     * @param endTime End LocalDateTime (exclusive).
+     * @param startTime Start Date (inclusive).
+     * @param endTime End Date (exclusive).
      * @return An iterator where all its events have same type as
      * {@param type} and timestamp between {@param startTime}
      * (inclusive) and {@param endTime} (exclusive).
      */
-    EventIterator query(String type, LocalDateTime startTime, LocalDateTime endTime);
+    EventIterator query(String type, Date startTime, Date endTime);
 }

@@ -1,9 +1,18 @@
 package br.com.jonyfs;
 
 import br.com.jonyfs.event.Event;
+import br.com.jonyfs.event.EventIterator;
 import br.com.jonyfs.event.EventRepository;
 import br.com.jonyfs.event.EventStore;
+import io.github.benas.randombeans.EnhancedRandomBuilder;
+import io.github.benas.randombeans.FieldDefinitionBuilder;
+import io.github.benas.randombeans.api.EnhancedRandom;
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.stream.Stream;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,8 +33,16 @@ public class EventTest {
 
     @Test
     public void givenEvent_whenSaveItAndFindIt_thenSameEvent() {
+
+        EnhancedRandom enhancedRandom = EnhancedRandomBuilder.aNewEnhancedRandomBuilder()
+            .dateRange(LocalDate.now().minusDays(1), LocalDate.now())
+            .exclude(FieldDefinitionBuilder.field().named("id").get())
+            .exclude(Serializable.class)
+            .randomize(FieldDefinitionBuilder.field().named("type").ofType(String.class).get(), new EventTypeRandomizer())
+            .build();
+
         LocalDateTime now = LocalDateTime.now();
-        Event event = new Event("some_type", now);
+        Event event = enhancedRandom.nextObject(Event.class);
 
         eventStore.insert(event);
 
@@ -39,25 +56,44 @@ public class EventTest {
     @Transactional
     @Test
     public void givenSomeEvents_whenDeleteAllEventsByType_thenOnlyOthers() {
-        String eventReadStatus = "READ_STATUS";
-        String eventChangeStatus = "CHANGE_STATUS";
-        String eventLockStatus = "LOCK_STATUS";
 
+        EnhancedRandom enhancedRandom = EnhancedRandomBuilder.aNewEnhancedRandomBuilder()
+            .dateRange(LocalDate.now().minusDays(1), LocalDate.now())
+            .exclude(FieldDefinitionBuilder.field().named("id").get())
+            .exclude(Serializable.class)
+            .randomize(FieldDefinitionBuilder.field().named("type").ofType(String.class).get(), new EventTypeRandomizer())
+            .build();
 
-        eventStore.insert(Event.builder().type(eventReadStatus).moment(LocalDateTime.now()).build());
-        eventStore.insert(Event.builder().type(eventReadStatus).moment(LocalDateTime.now().minusDays(1)).build());
-        eventStore.insert(Event.builder().type(eventReadStatus).moment(LocalDateTime.now().minusHours(3)).build());
+        for (int i = 0; i < 100; i++) {
+            eventStore.insert(enhancedRandom.nextObject(Event.class));
+        }
 
-        eventStore.insert(Event.builder().type(eventChangeStatus).moment(LocalDateTime.now().minusHours(1)).build());
-        eventStore.insert(Event.builder().type(eventChangeStatus).moment(LocalDateTime.now().minusMonths(3)).build());
+        assertThat(eventRepository.count()).isEqualTo(100);
 
-        eventStore.insert(Event.builder().type(eventLockStatus).moment(LocalDateTime.now().minusHours(12)).build());
+        eventStore.removeAll(EventType.CHANGE_STATUS);
 
-        assertThat(eventRepository.count()).isEqualTo(6);
+        assertThat(eventRepository.count()).isLessThan(100);
 
-        eventStore.removeAll(eventReadStatus);
+    }
 
-        assertThat(eventRepository.count()).isEqualTo(3);
+    @Transactional
+    @Test
+    public void givenALargeDatabaseEvents_whenDeleteAllEventsByType_thenOnlyOthers2() {
+
+        EnhancedRandom enhancedRandom = EnhancedRandomBuilder.aNewEnhancedRandomBuilder()
+            .dateRange(LocalDate.now().minusDays(1), LocalDate.now())
+            .exclude(FieldDefinitionBuilder.field().named("id").get())
+            .exclude(Serializable.class)
+            .randomize(FieldDefinitionBuilder.field().named("type").ofType(String.class).get(), new EventTypeRandomizer())
+            .build();
+
+        Stream<Event> events = enhancedRandom.objects(Event.class, 10000);
+
+        events.forEach(event -> eventStore.insert(event));
+
+        assertThat(eventRepository.count()).isEqualTo(10000);
+
+        EventIterator eventIterator = eventStore.query(EventType.LOCK_STATUS, Date.from(LocalDateTime.now().minusHours(12).atZone(ZoneId.systemDefault()).toInstant()), Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
 
     }
 }

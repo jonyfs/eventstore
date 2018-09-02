@@ -1,7 +1,7 @@
 
 package br.com.jonyfs.event;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +29,8 @@ public class EventStoreImpl implements EventStore {
     }
 
     @Override
-    public EventIterator query(String type, LocalDateTime startTime, LocalDateTime endTime) {
-        return new EventIteratorImpl(eventRepository.findAllByTypeAndMomentGreaterThanEqualAndMomentLessThan(type, startTime, endTime));
+    public EventIterator query(String type, Date startTime, Date endTime) {
+        return new EventIteratorImpl(eventRepository.findAll(type, startTime, endTime));
     }
 
 }

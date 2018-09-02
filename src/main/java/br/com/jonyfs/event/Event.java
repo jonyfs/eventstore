@@ -1,8 +1,10 @@
 package br.com.jonyfs.event;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +22,7 @@ public class Event extends AbstractPersistable<Long> implements Serializable {
 
     private String type;
 
-    private LocalDateTime moment;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date moment;
 
 }
