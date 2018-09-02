@@ -1,37 +1,46 @@
-
 package br.com.jonyfs.event;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Slf4j
-@Service
 public class EventStoreImpl implements EventStore {
 
-    @Autowired
-    EventRepository eventRepository;
+    // Creating a thread-safe Event List
+    @Getter
+    final List<Event> events = Collections.synchronizedList(new ArrayList());
 
     @Override
     public void insert(Event event) {
         LOGGER.debug("Inserting {}...", event);
-        event = eventRepository.save(event);
+        events.add(event);
         LOGGER.debug("Inserting {} OK!", event);
     }
 
     @Override
     public void removeAll(String type) {
         LOGGER.debug("Searching by event type {}...", type);
-        List<Event> events = eventRepository.deleteByType(type);
-        LOGGER.debug("{} event are removed.", events.size());
+        int size = events.size();
+        // Using Collection.removeIf, java 8 solution, to remove all references equals type
+        // The iime complexity is O(n)
+        events.removeIf(event -> event.getType().equals(type));
+        LOGGER.debug("{} event are removed.", size - events.size());
     }
 
     @Override
-    public EventIterator query(String type, Date startTime, Date endTime) {
+    public EventIterator query(String type, LocalDateTime startTime, LocalDateTime endTime) {
         LOGGER.debug("Searching by event type {} and moment between {} and {}...", type, startTime, endTime);
-        return new EventIteratorImpl(eventRepository.query(type, startTime, endTime).iterator());
-    }
 
+        // Using Streams to filter by fields
+        return new EventIteratorImpl(events
+            .stream()
+            .filter(event -> event.getType().equals(type))
+            .filter(event -> event.getMoment().isEqual(startTime) || event.getMoment().isAfter(startTime))
+            .filter(event -> event.getMoment().isBefore(endTime))
+            .iterator());
+    }
 }

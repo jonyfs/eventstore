@@ -9,7 +9,7 @@ public interface EventStore {
 
     void removeAll(String type);
 
-    EventIterator query(String type, Date startTime, Date endTime);
+    EventIterator query(String type, LocalDateTime startTime, LocalDateTime endTime);
 }
 ```
 
@@ -30,10 +30,6 @@ public interface EventStore {
 
 
 
-
-
 ## About it:
-
-This example was created using Spring Data Jpa to save Events in database H2 in memory.
 
 The Test Results,to verify if the code implementations was correct, could be verifid in in [SonarCloud](https://sonarcloud.io/dashboard?id=jonyfs_eventstore)
