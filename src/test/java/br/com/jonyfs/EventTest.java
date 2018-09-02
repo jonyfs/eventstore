@@ -107,6 +107,8 @@ public class EventTest {
 
         eventIterator.close();
 
+        eventIterator.remove();
+
         assertThat(eventIterator.moveNext()).isFalse();
 
     }
