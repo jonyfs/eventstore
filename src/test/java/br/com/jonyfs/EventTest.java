@@ -105,4 +105,18 @@ public class EventTest {
         assertThat(eventIterator.moveNext()).isFalse();
 
     }
+
+    @Test
+    public void givenAEmptyEventStore_whenTryRemoveActualItem_thenDoNothing() throws Exception {
+        EventStore eventStore = new EventStoreImpl();
+        EventIterator eventIterator = eventStore.query(EventType.LOCK_STATUS, LocalDateTime.now().minusHours(12), LocalDateTime.now());
+        eventIterator.remove();
+    }
+
+    @Test
+    public void givenAEmptyEventStore_whenTryGetActualItem_thenNull() throws Exception {
+        EventStore eventStore = new EventStoreImpl();
+        EventIterator eventIterator = eventStore.query(EventType.LOCK_STATUS, LocalDateTime.now().minusHours(12), LocalDateTime.now());
+        assertThat(eventIterator.current()).isNull();
+    }
 }
