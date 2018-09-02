@@ -33,7 +33,7 @@ public class EventIteratorImpl implements EventIterator {
 
     @Override
     public void remove() {
-        if (events != null) {
+        if (current != null) {
             events.remove();
         }
     }
