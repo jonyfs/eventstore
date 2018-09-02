@@ -9,7 +9,7 @@ public interface EventStore {
 
     void removeAll(String type);
 
-    EventIterator query(String type, long startTime, long endTime);
+    EventIterator query(String type, Date startTime, Date endTime);
 }
 ```
 
@@ -25,6 +25,7 @@ public interface EventStore {
 
 ## Tasks:
 * Write tests;
+    [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=coverage)](https://sonarcloud.io/dashboard?id=jonyfs_eventstore)
 * Provide some evidence of thread-safety;
 * Justify design choices, arguing about costs 
   and benefits involved. You may write those as comments 

@@ -30,6 +30,7 @@ public class EventStoreImpl implements EventStore {
 
     @Override
     public EventIterator query(String type, Date startTime, Date endTime) {
+        LOGGER.debug("Searching by event type {} and moment between {} and {}...", type, startTime, endTime);
         return new EventIteratorImpl(eventRepository.query(type, startTime, endTime).iterator());
     }
 

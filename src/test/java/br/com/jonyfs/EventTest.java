@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class EventTest {
@@ -78,7 +80,7 @@ public class EventTest {
 
     @Transactional
     @Test
-    public void givenALargeDatabaseEvents_whenDeleteAllEventsByType_thenOnlyOthers2() {
+    public void givenALargeDatabaseEvents_whenSearchEventsByTypeBetweenDates_thenEventIteratorIsNotNullAndIsPossibleRemoveElements() throws Exception {
 
         EnhancedRandom enhancedRandom = EnhancedRandomBuilder.aNewEnhancedRandomBuilder()
             .dateRange(LocalDate.now().minusDays(1), LocalDate.now())
@@ -99,8 +101,13 @@ public class EventTest {
 
         while (eventIterator.moveNext()) {
             Event event = eventIterator.current();
+            LOGGER.debug("Removing {}...", event);
             eventIterator.remove();
         }
+
+        eventIterator.close();
+
+        assertThat(eventIterator.moveNext()).isFalse();
 
     }
 }
