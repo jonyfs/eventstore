@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,11 +37,11 @@ public class EventStoreImpl implements EventStore {
         LOGGER.debug("Searching by event type {} and moment between {} and {}...", type, startTime, endTime);
 
         // Using Streams to filter by fields
-        return new EventIteratorImpl(events
+        return new EventIteratorImpl(Collections.synchronizedList(events
             .stream()
             .filter(event -> event.getType().equals(type))
             .filter(event -> event.getMoment().isEqual(startTime) || event.getMoment().isAfter(startTime))
             .filter(event -> event.getMoment().isBefore(endTime))
-            .iterator());
+            .collect(Collectors.toList())));
     }
 }

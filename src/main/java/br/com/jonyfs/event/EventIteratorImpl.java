@@ -1,24 +1,27 @@
 package br.com.jonyfs.event;
 
-import java.util.Iterator;
+import java.util.List;
 
 public class EventIteratorImpl implements EventIterator {
 
-    Iterator<Event> events;
+    List<Event> events;
 
     Event current;
 
-    public EventIteratorImpl(Iterator<Event> events) {
+    int currentIndex = -1;
+
+    public EventIteratorImpl(List<Event> events) {
         this.events = events;
     }
 
     @Override
     public boolean moveNext() {
-        if (events == null) {
+        if (events == null || events.isEmpty()) {
             return false;
         } else {
-            if (events.hasNext()) {
-                current = events.next();
+
+            if (currentIndex++ < events.size() - 1) {
+                current = events.get(currentIndex);
                 return true;
             } else {
                 return false;
@@ -33,8 +36,8 @@ public class EventIteratorImpl implements EventIterator {
 
     @Override
     public void remove() {
-        if (current != null) {
-            events.remove();
+        if (current != null && !events.isEmpty()) {
+            events.remove(currentIndex);
             this.current = null;
         }
     }
