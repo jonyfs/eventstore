@@ -25,14 +25,6 @@ public interface EventStore {
 
 ## About it:
 
-    I resolved this example using Spring Data Jpa to save Events in database H2 in memory.
+This example was created using Spring Data Jpa to save Events in database H2 in memory.
 
-    I Created some tests to verify if the code implementations was correct(See results in [SonarCloud](https://sonarcloud.io/dashboard?id=jonyfs_eventstore)
-
-* Write tests;
-* Provide some evidence of thread-safety;
-* Justify design choices, arguing about costs 
-  and benefits involved. You may write those as comments 
-  inline or, if you wish, provide a separate document 
-  summarizing those choices;
-* Write all code and documentation in english.
+The Test Results,to verify if the code implementations was correct, could be verifid in in [SonarCloud](https://sonarcloud.io/dashboard?id=jonyfs_eventstore)
