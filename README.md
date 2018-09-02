@@ -43,9 +43,3 @@ Collections.synchronizedList() method Returns a synchronized (thread-safe) list 
 [![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=jonyfs_eventstore)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=coverage)](https://sonarcloud.io/dashboard?id=jonyfs_eventstore)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=bugs)](https://sonarcloud.io/dashboard?id=jonyfs_eventstore)
-
-
-
-## About it:
-
-The Test Results,to verify if the code implementations was correct, could be verifid in in [SonarCloud](https://sonarcloud.io/dashboard?id=jonyfs_eventstore)
