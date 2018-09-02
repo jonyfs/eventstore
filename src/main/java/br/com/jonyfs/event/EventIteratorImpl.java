@@ -35,6 +35,7 @@ public class EventIteratorImpl implements EventIterator {
     public void remove() {
         if (current != null) {
             events.remove();
+            this.current = null;
         }
     }
 

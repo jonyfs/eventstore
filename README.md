@@ -13,6 +13,22 @@ public interface EventStore {
 }
 ```
 
+Events may be stored in memory, data files, a database, on a remote server, etc. For this example, was implemented an in-memory event event store.
+
+The events in memory was stored in a Syncronized List as below:
+
+```java
+public class EventStoreImpl implements EventStore {
+
+    // Creating a thread-safe Event List
+    @Getter
+    final List<Event> events = Collections.synchronizedList(new ArrayList());
+...
+}
+```
+
+Collections.synchronizedList() method Returns a synchronized (thread-safe) list backed by the specified list. In order to guarantee serial access, it is critical that all access to the backing list is accomplished through the returned list.
+
 ## Continuous Integration
 [![Codeship Status for jonyfs/eventstore](https://app.codeship.com/projects/2c9c90e0-905c-0136-a649-22ecb9c20d15/status?branch=master)](https://app.codeship.com/projects/304106)
 

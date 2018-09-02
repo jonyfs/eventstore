@@ -142,4 +142,40 @@ public class EventTest {
         EventIterator eventIterator = eventStore.query(EventType.LOCK_STATUS, LocalDateTime.now().minusHours(12), LocalDateTime.now());
         assertThat(eventIterator.current()).isNull();
     }
+
+    @Test
+    public void givenAEventStoreWith10Events_whenTryGetActualItemAfterMoveNextAndRemove_thenNull() throws Exception {
+        EventStore eventStore = new EventStoreImpl();
+
+        EnhancedRandom enhancedRandom = EnhancedRandomBuilder.aNewEnhancedRandomBuilder()
+            .dateRange(LocalDate.now().minusDays(1), LocalDate.now())
+            .exclude(FieldDefinitionBuilder.field().named("id").get())
+            .exclude(Serializable.class)
+            .randomize(FieldDefinitionBuilder.field().named("type").ofType(String.class).get(), new EventTypeRandomizer())
+            .build();
+
+        Stream<Event> events = enhancedRandom.objects(Event.class, 10);
+
+        events.forEach(event -> eventStore.insert(event));
+
+        assertThat(eventStore.getEvents()).isNotNull();
+
+        EventIterator eventIterator = eventStore.query(EventType.LOCK_STATUS, LocalDateTime.now().minusHours(12), LocalDateTime.now());
+
+        assertThat(eventIterator).isNotNull();
+
+        while (eventIterator.moveNext()) {
+            Event event = eventIterator.current();
+            LOGGER.debug("Removing {}...", event);
+            eventIterator.remove();
+            assertThat(eventIterator.current()).isNull();
+        }
+
+        eventIterator.close();
+
+        eventIterator.remove();
+
+        assertThat(eventIterator.moveNext()).isFalse();
+
+    }
 }
