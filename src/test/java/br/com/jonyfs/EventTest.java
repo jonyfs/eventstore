@@ -95,5 +95,12 @@ public class EventTest {
 
         EventIterator eventIterator = eventStore.query(EventType.LOCK_STATUS, Date.from(LocalDateTime.now().minusHours(12).atZone(ZoneId.systemDefault()).toInstant()), Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
 
+        assertThat(eventIterator).isNotNull();
+
+        while (eventIterator.moveNext()) {
+            Event event = eventIterator.current();
+            eventIterator.remove();
+        }
+
     }
 }

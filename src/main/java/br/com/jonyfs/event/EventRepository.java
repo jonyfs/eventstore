@@ -16,6 +16,6 @@ public interface EventRepository extends PagingAndSortingRepository<Event, Strin
     Iterator<Event> findByTypeAndMomentBetween(String type, Date start, Date stop);
 
     @Query("select e from Event e where e.type = :type and e.moment between :start and :end")
-    Iterator<Event> findAll(@Param("type") String type, @Param("start") Date start, @Param("end") Date end);
+    Iterable<Event> query(@Param("type") String type, @Param("start") Date start, @Param("end") Date end);
 
 }

@@ -14,11 +14,15 @@ public class EventIteratorImpl implements EventIterator {
 
     @Override
     public boolean moveNext() {
-        if (events.hasNext()) {
-            current = events.next();
-            return true;
-        } else {
+        if (events == null) {
             return false;
+        } else {
+            if (events.hasNext()) {
+                current = events.next();
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
@@ -29,7 +33,9 @@ public class EventIteratorImpl implements EventIterator {
 
     @Override
     public void remove() {
-        events.remove();
+        if (events != null) {
+            events.remove();
+        }
     }
 
     @Override
