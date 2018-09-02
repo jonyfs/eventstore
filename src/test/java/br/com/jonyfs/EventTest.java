@@ -30,7 +30,6 @@ public class EventTest {
             .randomize(FieldDefinitionBuilder.field().named("type").ofType(String.class).get(), new EventTypeRandomizer())
             .build();
 
-        LocalDateTime now = LocalDateTime.now();
         Event event = enhancedRandom.nextObject(Event.class);
 
         eventStore.insert(event);
@@ -103,6 +102,30 @@ public class EventTest {
         eventIterator.remove();
 
         assertThat(eventIterator.moveNext()).isFalse();
+
+    }
+
+    @Test
+    public void givenEventStoreWith1Event_whenQueryByEventAndGetOne_thenSameEvent() {
+
+        EventStore eventStore = new EventStoreImpl();
+
+        EnhancedRandom enhancedRandom = EnhancedRandomBuilder.aNewEnhancedRandomBuilder()
+            .dateRange(LocalDate.now().minusDays(1), LocalDate.now())
+            .exclude(FieldDefinitionBuilder.field().named("id").get())
+            .exclude(Serializable.class)
+            .randomize(FieldDefinitionBuilder.field().named("type").ofType(String.class).get(), new EventTypeRandomizer())
+            .build();
+
+        Event event = enhancedRandom.nextObject(Event.class);
+
+        eventStore.insert(event);
+
+        assertThat(eventStore.getEvents()).isNotNull();
+
+        EventIterator eventIterator = eventStore.query(event.getType(), event.getMoment(), LocalDateTime.now().plusDays(1));
+        assertThat(eventIterator.moveNext()).isTrue();
+        assertThat(eventIterator.current()).isNotNull();
 
     }
 
