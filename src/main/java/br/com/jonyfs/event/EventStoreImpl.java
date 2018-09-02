@@ -1,9 +1,11 @@
 
 package br.com.jonyfs.event;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class EventStoreImpl implements EventStore {
 
@@ -12,7 +14,9 @@ public class EventStoreImpl implements EventStore {
 
     @Override
     public void insert(Event event) {
-        eventRepository.save(event);
+        LOGGER.debug("Inserting {}...", event);
+        event = eventRepository.save(event);
+        LOGGER.debug("Inserting {} OK!", event);
     }
 
     @Override
