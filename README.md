@@ -5,7 +5,7 @@ interface.
  
 ```java
 public interface EventStore {
-    void insert(Event event);
+    void insert(Event event); 
 
     void removeAll(String type);
 
@@ -23,9 +23,13 @@ public interface EventStore {
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=coverage)](https://sonarcloud.io/dashboard?id=jonyfs_eventstore)
 
 
-## Tasks:
+## About it:
+
+    I resolved this example using Spring Data Jpa to save Events in database H2 in memory.
+
+    I Created some tests to verify if the code implementations was correct(See results in [SonarCloud](https://sonarcloud.io/dashboard?id=jonyfs_eventstore)
+
 * Write tests;
-    [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=coverage)](https://sonarcloud.io/dashboard?id=jonyfs_eventstore)
 * Provide some evidence of thread-safety;
 * Justify design choices, arguing about costs 
   and benefits involved. You may write those as comments 
