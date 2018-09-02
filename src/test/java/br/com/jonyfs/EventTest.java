@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -35,6 +36,7 @@ public class EventTest {
         assertThat(event.getType()).isEqualTo(savedEvent.getType());
     }
 
+    @Transactional
     @Test
     public void givenSomeEvents_whenDeleteAllEventsByType_thenOnlyOthers() {
         String eventReadStatus = "READ_STATUS";
@@ -52,6 +54,10 @@ public class EventTest {
         eventStore.insert(Event.builder().type(eventLockStatus).moment(LocalDateTime.now().minusHours(12)).build());
 
         assertThat(eventRepository.count()).isEqualTo(6);
+
+        eventStore.removeAll(eventReadStatus);
+
+        assertThat(eventRepository.count()).isEqualTo(3);
 
     }
 }

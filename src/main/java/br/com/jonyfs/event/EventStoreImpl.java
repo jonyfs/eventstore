@@ -1,6 +1,8 @@
 
 package br.com.jonyfs.event;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,12 +23,14 @@ public class EventStoreImpl implements EventStore {
 
     @Override
     public void removeAll(String type) {
-        eventRepository.deleteAll();
+        LOGGER.debug("Searching by event type {}...", type);
+        List<Event> events = eventRepository.deleteByType(type);
+        LOGGER.debug("{} event are removed.", events.size());
     }
 
     @Override
-    public EventIterator query(String type, long startTime, long endTime) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public EventIterator query(String type, LocalDateTime startTime, LocalDateTime endTime) {
+        return new EventIteratorImpl(eventRepository.findAllByTypeAndMomentGreaterThanEqualAndMomentLessThan(type, startTime, endTime));
     }
 
 }

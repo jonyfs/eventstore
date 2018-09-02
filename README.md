@@ -23,7 +23,7 @@ public interface EventStore {
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jonyfs_eventstore&metric=coverage)](https://sonarcloud.io/dashboard?id=jonyfs_eventstore)
 
 
-##Tasks:
+## Tasks:
 * Write tests;
 * Provide some evidence of thread-safety;
 * Justify design choices, arguing about costs 
