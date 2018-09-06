@@ -87,7 +87,7 @@ public class EventTest {
 
         assertThat(eventStore.getEvents().size()).isEqualTo(10000);
 
-        EventIterator eventIterator = eventStore.query(EventType.LOCK_STATUS, LocalDateTime.now().minusHours(12), LocalDateTime.now());
+        EventIterator eventIterator = eventStore.query(EventType.LOCK_STATUS, LocalDateTime.now().minusDays(2), LocalDateTime.now());
 
         assertThat(eventIterator).isNotNull();
 
@@ -132,19 +132,19 @@ public class EventTest {
     @Test
     public void givenAEmptyEventStore_whenTryRemoveActualItem_thenDoNothing() throws Exception {
         EventStore eventStore = new EventStoreImpl();
-        EventIterator eventIterator = eventStore.query(EventType.LOCK_STATUS, LocalDateTime.now().minusHours(12), LocalDateTime.now());
+        EventIterator eventIterator = eventStore.query(EventType.LOCK_STATUS, LocalDateTime.now().minusDays(2), LocalDateTime.now());
         eventIterator.remove();
     }
 
     @Test
     public void givenAEmptyEventStore_whenTryGetActualItem_thenNull() throws Exception {
         EventStore eventStore = new EventStoreImpl();
-        EventIterator eventIterator = eventStore.query(EventType.LOCK_STATUS, LocalDateTime.now().minusHours(12), LocalDateTime.now());
+        EventIterator eventIterator = eventStore.query(EventType.LOCK_STATUS, LocalDateTime.now().minusDays(2), LocalDateTime.now());
         assertThat(eventIterator.current()).isNull();
     }
 
     @Test
-    public void givenAEventStoreWith10Events_whenTryGetActualItemAfterMoveNextAndRemove_thenNull() throws Exception {
+    public void givenAEventStoreWith100Events_whenTryGetActualItemAfterMoveNextAndRemove_thenNull() throws Exception {
         EventStore eventStore = new EventStoreImpl();
 
         EnhancedRandom enhancedRandom = EnhancedRandomBuilder.aNewEnhancedRandomBuilder()
@@ -154,13 +154,13 @@ public class EventTest {
             .randomize(FieldDefinitionBuilder.field().named("type").ofType(String.class).get(), new EventTypeRandomizer())
             .build();
 
-        Stream<Event> events = enhancedRandom.objects(Event.class, 10);
+        Stream<Event> events = enhancedRandom.objects(Event.class, 100);
 
         events.forEach(event -> eventStore.insert(event));
 
         assertThat(eventStore.getEvents()).isNotNull();
 
-        EventIterator eventIterator = eventStore.query(EventType.LOCK_STATUS, LocalDateTime.now().minusHours(12), LocalDateTime.now());
+        EventIterator eventIterator = eventStore.query(EventType.LOCK_STATUS, LocalDateTime.now().minusDays(2), LocalDateTime.now());
 
         assertThat(eventIterator).isNotNull();
 
@@ -170,6 +170,8 @@ public class EventTest {
             eventIterator.remove();
             assertThat(eventIterator.current()).isNull();
         }
+
+        assertThat(eventIterator.moveNext()).isFalse();
 
         eventIterator.close();
 
